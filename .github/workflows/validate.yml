@@ -16,8 +16,8 @@ jobs:
         run: |
           python tools/verify_repository.py
           python tools/verify_public_boundary.py
-      - name: Install lean server dependencies (no private model)
-        run: pip install -r requirements-server.txt
+      - name: Install server and synthetic-model test dependencies (no private model)
+        run: pip install -r requirements-test.txt
       - name: Test API contracts and native CIF preprocessing without weights
         run: python -m unittest discover -s tests -v
       - name: Check frontend syntax

@@ -1,0 +1,3 @@
+-r requirements-server.txt
+# CI-only synthetic Identity graph; no private research weights.
+onnx==1.17.0

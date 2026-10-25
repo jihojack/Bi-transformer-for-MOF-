@@ -30,7 +30,7 @@ def validate_descriptors(data):
     return d
 
 
-def create_app(predictor=None,warm=True):
+def create_app(predictor=None,warm=True,defer_warm=False):
     app=Flask(__name__,static_folder=None)
     app.config['MAX_CONTENT_LENGTH']=2_100_000
     runtime=predictor or Predictor()
@@ -44,7 +44,36 @@ def create_app(predictor=None,warm=True):
     app.extensions['mof_loader_thread']=None
     app.extensions['mof_warm_enabled']=warm
     app.extensions['mof_health_state']=None
-    emit('application_created',warm_enabled=warm,max_atoms=runtime.max_atoms)
+    runtime_pid=os.getpid()
+    start_lock=threading.Lock()
+    emit('application_created',warm_enabled=warm,deferred_warm=defer_warm,max_atoms=runtime.max_atoms)
+
+    def start_model_for_process():
+        nonlocal runtime,runtime_pid,start_lock
+        pid=os.getpid()
+        # A preload/fork copies Python state but NOT a running loader thread.
+        # Recreate both runtime and locks before touching any inherited lock.
+        if runtime_pid!=pid:
+            previous_pid=runtime_pid
+            if not isinstance(runtime,Predictor):raise RuntimeError('Injected predictor cannot be inherited across processes')
+            runtime=Predictor(path=runtime.path,expected_hash=runtime.expected_hash,max_atoms=runtime.max_atoms)
+            runtime_pid=pid;start_lock=threading.Lock()
+            app.extensions['mof_predictor']=runtime
+            app.extensions['mof_loader_thread']=None
+            app.extensions['mof_health_state']=None
+            emit('worker_runtime_created',previous_process_id=previous_pid)
+        if not warm:return
+        with start_lock:
+            loader=app.extensions['mof_loader_thread']
+            state=runtime.status()
+            if state['ready'] or state.get('error') or (loader and loader.is_alive()):return
+            def start_model():
+                emit('model_loader_thread_started')
+                try:runtime.load()
+                except Exception:logging.getLogger(__name__).error('Private model unavailable; configure server model path and SHA-256')
+            loader=threading.Thread(target=start_model,name='mof-model-loader',daemon=True)
+            app.extensions['mof_loader_thread']=loader;loader.start()
+    app.extensions['mof_start_model']=start_model_for_process
 
     def runtime_status():
         snapshot=runtime.status()
@@ -54,6 +83,9 @@ def create_app(predictor=None,warm=True):
 
     @app.before_request
     def guard():
+        # Fallback when a host overrides Gunicorn's config/hooks. A request is
+        # handled in the worker, never in the preloading master process.
+        start_model_for_process()
         origin=request.headers.get('Origin','').rstrip('/')
         same=origin==request.host_url.rstrip('/')
         if request.path.startswith('/api/') and origin and not same and origin not in allowed:return jsonify(error='허용되지 않은 웹 출처입니다.'),403
@@ -158,16 +190,14 @@ def create_app(predictor=None,warm=True):
     @app.errorhandler(RequestEntityTooLarge)
     def too_large(_):return jsonify(error='요청 파일이 너무 큽니다. CIF는 2 MB 이하를 사용하세요.'),413
 
-    if warm:
-        def start_model():
-            emit('model_loader_thread_started')
-            try:runtime.load()
-            except Exception:logging.getLogger(__name__).error('Private model unavailable; configure server model path and SHA-256')
-        loader=threading.Thread(target=start_model,name='mof-model-loader',daemon=True)
-        app.extensions['mof_loader_thread']=loader;loader.start()
+    if warm and not defer_warm:start_model_for_process()
+    elif warm:emit('model_warm_start_deferred_to_worker')
     else:emit('model_warm_start_disabled')
     return app
 
 
-app=create_app(warm=os.getenv('MOF_SKIP_WARM')!='1')
-if __name__=='__main__':app.run(host=os.getenv('MOF_BIND','127.0.0.1'),port=int(os.getenv('PORT','7866')),debug=False)
+# Importing this WSGI module must NEVER start an ONNX loader in a master process.
+app=create_app(warm=os.getenv('MOF_SKIP_WARM')!='1',defer_warm=True)
+if __name__=='__main__':
+    app.extensions['mof_start_model']()
+    app.run(host=os.getenv('MOF_BIND','127.0.0.1'),port=int(os.getenv('PORT','7866')),debug=False)

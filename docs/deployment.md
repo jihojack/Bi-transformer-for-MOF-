@@ -26,7 +26,7 @@ python -m server.app
 
 ```text
 python tools/verify_private_inference.py
-gunicorn --workers 1 --threads 2 --timeout 180 --bind 0.0.0.0:$PORT server.app:app
+gunicorn --config gunicorn.conf.py --workers 1 --threads 2 --timeout 180 --bind 0.0.0.0:$PORT server.app:app
 ```
 
 ## 3. Render 무료 시험 배포
@@ -65,6 +65,14 @@ python tools/package_frontend.py --output outputs/netlify-client --api-origin ht
 - `/api/status`는 초기화 단계, 경과 시간, 로더 스레드 생존 여부, 초기화/현재 프로세스 ID를 반환한다. `/healthz`는 여전히 실제 모델 준비 전에는 503이다. 진단을 위해 가짜 성공 응답으로 바꾸지 않는다.
 
 이 변경은 초기화 진단용이다. 가중치, 연산 옵션, 최적화 수준, 예측 계산은 바꾸지 않는다. 2026-10-25의 첫 Render 배포는 준비 상태 검사 503 반복 후 시간 초과했으며, 정확한 원인은 당시 로그만으로 확정하지 못했다. 새 커밋의 클라우드 성공 여부는 다음 배포 로그로 별도 검증해야 한다.
+
+### 확인된 pre-fork 초기화 오류와 수정
+
+후속 Render 로그에서 다운로드·해시 검증은 통과했고, 부모 PID 57의 모델은 5.204초에 `ready`가 되었다. 그러나 요청을 처리한 워커 PID 62는 부모의 로딩 중 상태를 복제한 채 로더 스레드가 없는 상태였다. 부모가 모델을 다 올려도 워커의 Python 객체에는 반영되지 않으므로 준비 상태 검사가 계속 503이었다. 이 실행에서는 다운로드 인증이나 모델 로딩 속도가 실패 원인이 아니었다.
+
+WSGI 모듈 import 시에는 이제 로더를 시작하지 않는다. `gunicorn.conf.py`의 `post_worker_init`가 fork 이후 워커에서만 모델을 초기화하며, 부모에서 복제한 Predictor/락도 새로 만든다. 설정 파일을 호스트가 덮어쓰는 경우 첫 요청에서도 같은 시작 함수를 호출한다. 동일 워커에서 중복 스레드는 만들지 않으며 준비 상태는 여전히 실제 모델 로딩 완료 후에만 200이다. 로그의 `model_loader_thread_started`/`ready` PID와 `/api/status`의 `process_id`, `loader_process_id`가 일치해야 한다.
+
+토큰·모델 URL·가중치·ONNX 연산 옵션은 바꾸지 않는다. Linux CI는 공개 가중치 대신 임시 합성 Identity 그래프로 실제 ONNX Runtime/Gunicorn을 구동하여 일반 시작, `--preload` 시작, 훅이 없는 경우의 첫 요청 시작을 확인한다. 실제 Render 재배포 성공은 별도 확인한다.
 
 ## 안전·운영 한계
 

@@ -42,12 +42,15 @@ class Predictor:
         emit('model_stage',stage=stage,elapsed_seconds=self.elapsed())
 
     def status(self):
-        return {'ready':self.session is not None,'loading':self.loading,'error':'서버 모델을 준비하지 못했습니다. 관리자에게 문의하세요.' if self.failed else None,
+        wrong_process=self.load_pid is not None and self.load_pid!=os.getpid()
+        return {'ready':self.session is not None and not wrong_process,'loading':self.loading and not wrong_process,'error':'서버 모델을 준비하지 못했습니다. 관리자에게 문의하세요.' if self.failed or wrong_process else None,
                 'execution':'server_cpu','device':'Server CPU','max_atoms':self.max_atoms,'weights_sent_to_browser':False,
-                'model_stage':self.stage,'error_code':self.error_code,'load_elapsed_seconds':self.elapsed(),
+                'model_stage':self.stage,'error_code':'model_process_mismatch' if wrong_process else self.error_code,'load_elapsed_seconds':self.elapsed(),
                 'stage_elapsed_seconds':round(time.monotonic()-self.stage_started_at,3),'process_id':os.getpid(),'loader_process_id':self.load_pid}
 
     def load(self):
+        if self.load_pid is not None and self.load_pid!=os.getpid():
+            raise RuntimeError('Recreate predictor in the worker before loading; inherited locks/sessions are unsafe')
         with self.lock:
             if self.session is not None:return
             self.loading=True;self.failed=False;self.error_code=None
@@ -81,7 +84,7 @@ class Predictor:
                 self.loading=False;stop.set()
 
     def predict(self,path,descriptors):
-        if self.session is None:self.load()
+        if self.session is None or self.load_pid!=os.getpid():self.load()
         start=time.perf_counter();tensors,structure=prepare(path,descriptors,self.max_atoms);graph_seconds=time.perf_counter()-start
         tick=time.perf_counter();values=self.session.run(None,{i.name:tensors[i.name] for i in self.session.get_inputs()})[0].reshape(-1)
         if values.shape!=(10,) or not np.isfinite(values).all():raise RuntimeError('Invalid network output')

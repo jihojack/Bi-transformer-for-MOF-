@@ -89,6 +89,48 @@ class StartupTests(unittest.TestCase):
         self.assertFalse(client.get('/api/status').get_json()['warm_enabled'])
         self.assertEqual(client.get('/healthz').status_code,503)
 
+    def test_deferred_warm_only_starts_after_worker_hook_or_request(self):
+        runtime=self.predictor()
+        with patch('server.runtime.ort.InferenceSession',return_value=object()) as native:
+            app=create_app(runtime,warm=True,defer_warm=True)
+            self.assertEqual(runtime.stage,'not_started');native.assert_not_called()
+            self.assertIsNone(app.extensions['mof_loader_thread'])
+            # This same callback is invoked by Gunicorn's post_worker_init hook.
+            app.extensions['mof_start_model']()
+            app.extensions['mof_loader_thread'].join(3)
+            self.assertEqual(app.test_client().get('/healthz').status_code,200)
+            self.assertEqual(native.call_count,1)
+
+    def test_request_fallback_starts_deferred_model_without_hook(self):
+        runtime=self.predictor()
+        with patch('server.runtime.ort.InferenceSession',return_value=object()) as native:
+            app=create_app(runtime,warm=True,defer_warm=True)
+            app.test_client().get('/api/status')
+            app.extensions['mof_loader_thread'].join(3)
+            self.assertEqual(app.test_client().get('/healthz').status_code,200)
+            self.assertEqual(native.call_count,1)
+
+    def test_forked_worker_recreates_runtime_without_touching_inherited_lock(self):
+        runtime=self.predictor();runtime.load_pid=os.getpid();runtime.loading=True
+        runtime.stage='verifying_model_hash';runtime.lock.acquire()
+        app=create_app(runtime,warm=True,defer_warm=True)
+        child_pid=os.getpid()+1000
+        try:
+            with patch('server.app.os.getpid',return_value=child_pid),patch('server.runtime.ort.InferenceSession',return_value=object()):
+                app.extensions['mof_start_model']()
+                app.extensions['mof_loader_thread'].join(3)
+                fresh=app.extensions['mof_predictor']
+                self.assertIsNot(fresh,runtime);self.assertTrue(runtime.lock.locked())
+                self.assertEqual(fresh.status()['loader_process_id'],child_pid)
+                self.assertTrue(fresh.status()['ready'])
+        finally:runtime.lock.release()
+
+    def test_runtime_rejects_session_from_different_process(self):
+        runtime=self.predictor();runtime.session=object();runtime.load_pid=os.getpid()+1000
+        self.assertFalse(runtime.status()['ready'])
+        self.assertEqual(runtime.status()['error_code'],'model_process_mismatch')
+        with self.assertRaises(RuntimeError):runtime.load()
+
     def test_existing_private_download_is_verified_without_network_or_leaks(self):
         output=io.StringIO()
         settings={'MOF_MODEL_PATH':str(self.model),'MOF_MODEL_SHA256':self.digest,

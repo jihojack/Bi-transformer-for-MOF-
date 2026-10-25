@@ -4,7 +4,7 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r requirements-server.txt
-    startCommand: python -u tools/download_private_model.py && gunicorn --workers 1 --threads 2 --timeout 180 --access-logfile - --error-logfile - --capture-output --log-level info --bind 0.0.0.0:$PORT server.app:app
+    startCommand: python -u tools/download_private_model.py && gunicorn --config gunicorn.conf.py --workers 1 --threads 2 --timeout 180 --access-logfile - --error-logfile - --capture-output --log-level info --bind 0.0.0.0:$PORT server.app:app
     healthCheckPath: /healthz
     envVars:
       - key: PYTHONUNBUFFERED
