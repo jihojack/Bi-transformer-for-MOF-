@@ -54,6 +54,18 @@ python tools/package_frontend.py --output outputs/netlify-client --api-origin ht
 
 기존의 모델 포함 정적 배포는 별개다. 새 화면을 배포해도 이전 Netlify deploy URL이 사라진다고 가정하지 말고, 이전 배포의 접근과 모델 파일도 서비스 관리 화면에서 정리해야 한다.
 
+## 시작 실패 진단
+
+`[mof_startup]`으로 시작하는 JSON 로그는 즉시 출력되며, 비밀 URL·경로·토큰·원본 예외 메시지를 기록하지 않는다. 정상 순서는 `private_model_preparation_started` → `private_model_verified` → `application_created` → `model_loader_thread_started` → `model_hash_verified` → `creating_onnx_session` 단계 → `ready` 단계이다. ONNX 로딩 중에는 15초 간격 진행 로그가 나오며 Linux에서는 프로세스 RSS와 컨테이너 메모리 사용량/상한도 포함한다.
+
+- `private_model_preparation_failed`: 다운로드 또는 파일 검증 실패. HTTP 오류면 상태 번호만 기록한다.
+- `model_load_failed`: `error_code` 및 실패 단계를 확인한다. 파일 없음, 해시 불일치, ONNX 세션 초기화 오류를 구분한다.
+- `creating_onnx_session`에서 진행 로그만 반복: 네이티브 모델 초기화가 끝나지 않은 상태다. 이 로그만으로 CPU·메모리·교착 중 원인을 확정하지 않는다.
+- `model_warm_start_disabled`: `MOF_SKIP_WARM=1`이 설정되었는지 확인한다.
+- `/api/status`는 초기화 단계, 경과 시간, 로더 스레드 생존 여부, 초기화/현재 프로세스 ID를 반환한다. `/healthz`는 여전히 실제 모델 준비 전에는 503이다. 진단을 위해 가짜 성공 응답으로 바꾸지 않는다.
+
+이 변경은 초기화 진단용이다. 가중치, 연산 옵션, 최적화 수준, 예측 계산은 바꾸지 않는다. 2026-10-25의 첫 Render 배포는 준비 상태 검사 503 반복 후 시간 초과했으며, 정확한 원인은 당시 로그만으로 확정하지 못했다. 새 커밋의 클라우드 성공 여부는 다음 배포 로그로 별도 검증해야 한다.
+
 ## 안전·운영 한계
 
 - 업로드 CIF는 요청 단위 임시 폴더에서 처리 후 삭제한다. 앱은 파일 내용·인증 토큰을 로그에 남기지 않는다. 호스팅 제공자의 접속 로그 정책은 별도다.

@@ -15,6 +15,7 @@ import time
 from flask import Flask,abort,jsonify,request,send_file
 from werkzeug.exceptions import RequestEntityTooLarge
 from .runtime import Predictor,PRESSURES
+from .diagnostics import emit
 
 ROOT=Path(__file__).resolve().parents[1]
 KEYS=['surface_area_m2g','void_fraction','lcd','pld']
@@ -40,6 +41,16 @@ def create_app(predictor=None,warm=True):
     gate=threading.BoundedSemaphore(1);rate_lock=threading.Lock();rate=defaultdict(deque)
     limit=int(os.getenv('MOF_REQUESTS_PER_MINUTE','60'))
     app.extensions['mof_predictor']=runtime
+    app.extensions['mof_loader_thread']=None
+    app.extensions['mof_warm_enabled']=warm
+    app.extensions['mof_health_state']=None
+    emit('application_created',warm_enabled=warm,max_atoms=runtime.max_atoms)
+
+    def runtime_status():
+        snapshot=runtime.status()
+        loader=app.extensions['mof_loader_thread']
+        snapshot.update(warm_enabled=warm,loader_thread_alive=bool(loader and loader.is_alive()))
+        return snapshot
 
     @app.before_request
     def guard():
@@ -80,10 +91,18 @@ def create_app(predictor=None,warm=True):
         return send_file(ROOT/'frontend'/filename)
 
     @app.get('/healthz')
-    def health():return jsonify(ready=runtime.status()['ready']),200 if runtime.status()['ready'] else 503
+    def health():
+        snapshot=runtime_status()
+        state=(snapshot['ready'],snapshot.get('model_stage'),snapshot.get('error_code'))
+        if state!=app.extensions['mof_health_state']:
+            emit('readiness_changed',ready=state[0],stage=state[1],error_code=state[2],
+                 loader_thread_alive=snapshot['loader_thread_alive'],warm_enabled=warm,
+                 loader_process_id=snapshot.get('loader_process_id'),load_elapsed_seconds=snapshot.get('load_elapsed_seconds'))
+            app.extensions['mof_health_state']=state
+        return jsonify({key:snapshot.get(key) for key in ['ready','loading','model_stage','error_code','load_elapsed_seconds','loader_thread_alive']}),200 if snapshot['ready'] else 503
 
     @app.get('/api/status')
-    def status():return jsonify(runtime.status())
+    def status():return jsonify(runtime_status())
 
     @app.get('/api/examples')
     def example_list():
@@ -141,9 +160,12 @@ def create_app(predictor=None,warm=True):
 
     if warm:
         def start_model():
+            emit('model_loader_thread_started')
             try:runtime.load()
             except Exception:logging.getLogger(__name__).error('Private model unavailable; configure server model path and SHA-256')
-        threading.Thread(target=start_model,daemon=True).start()
+        loader=threading.Thread(target=start_model,name='mof-model-loader',daemon=True)
+        app.extensions['mof_loader_thread']=loader;loader.start()
+    else:emit('model_warm_start_disabled')
     return app
 
 

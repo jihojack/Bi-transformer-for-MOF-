@@ -10,6 +10,7 @@ import time
 import numpy as np
 import onnxruntime as ort
 from .preprocessing import prepare
+from .diagnostics import emit
 
 BASE=Path(__file__).resolve().parent
 MANIFEST=json.loads((BASE/'model_manifest.json').read_text(encoding='utf-8'))
@@ -29,24 +30,55 @@ class Predictor:
         self.expected_hash=expected_hash or os.getenv('MOF_MODEL_SHA256') or MANIFEST['onnx']['sha256']
         self.max_atoms=max_atoms or int(os.getenv('MOF_MAX_ATOMS','200'))
         self.session=None;self.loading=False;self.failed=False;self.lock=threading.Lock()
+        self.stage='not_started';self.error_code=None;self.load_started_at=None;self.load_finished_at=None;self.load_pid=None
+        self.stage_started_at=time.monotonic()
+
+    def elapsed(self):
+        if self.load_started_at is None:return 0.
+        return round((self.load_finished_at or time.monotonic())-self.load_started_at,3)
+
+    def mark_stage(self,stage):
+        self.stage=stage;self.stage_started_at=time.monotonic()
+        emit('model_stage',stage=stage,elapsed_seconds=self.elapsed())
 
     def status(self):
         return {'ready':self.session is not None,'loading':self.loading,'error':'서버 모델을 준비하지 못했습니다. 관리자에게 문의하세요.' if self.failed else None,
-                'execution':'server_cpu','device':'Server CPU','max_atoms':self.max_atoms,'weights_sent_to_browser':False}
+                'execution':'server_cpu','device':'Server CPU','max_atoms':self.max_atoms,'weights_sent_to_browser':False,
+                'model_stage':self.stage,'error_code':self.error_code,'load_elapsed_seconds':self.elapsed(),
+                'stage_elapsed_seconds':round(time.monotonic()-self.stage_started_at,3),'process_id':os.getpid(),'loader_process_id':self.load_pid}
 
     def load(self):
         with self.lock:
             if self.session is not None:return
-            self.loading=True
+            self.loading=True;self.failed=False;self.error_code=None
+            self.load_started_at=time.monotonic();self.load_finished_at=None;self.load_pid=os.getpid()
+            stop=threading.Event()
+            def progress():
+                while not stop.wait(15):
+                    emit('model_loading_progress',stage=self.stage,elapsed_seconds=self.elapsed(),
+                         stage_elapsed_seconds=round(time.monotonic()-self.stage_started_at,3))
+            monitor=threading.Thread(target=progress,name='mof-startup-progress',daemon=True);monitor.start()
             try:
-                if not self.path.is_file():raise RuntimeError('Private model file not configured')
-                if not self.expected_hash or file_hash(self.path)!=self.expected_hash:raise RuntimeError('Private model SHA-256 mismatch')
+                self.mark_stage('checking_model_file')
+                if not self.path.is_file():
+                    self.error_code='model_file_missing';raise RuntimeError('Private model file not configured')
+                self.mark_stage('verifying_model_hash')
+                if not self.expected_hash or file_hash(self.path)!=self.expected_hash:
+                    self.error_code='model_hash_mismatch';raise RuntimeError('Private model SHA-256 mismatch')
+                emit('model_hash_verified',bytes=self.path.stat().st_size,elapsed_seconds=self.elapsed())
                 options=ort.SessionOptions();options.intra_op_num_threads=1;options.inter_op_num_threads=1;options.log_severity_level=3
+                self.mark_stage('creating_onnx_session')
+                emit('onnx_session_options',runtime_version=ort.__version__,intra_threads=1,inter_threads=1,provider='CPUExecutionProvider')
                 self.session=ort.InferenceSession(str(self.path),sess_options=options,providers=['CPUExecutionProvider'])
-                self.failed=False
-            except Exception:
-                self.failed=True;raise
-            finally:self.loading=False
+                self.failed=False;self.load_finished_at=time.monotonic();self.mark_stage('ready')
+            except Exception as exc:
+                failure_stage=self.stage
+                self.error_code=self.error_code or ('model_out_of_memory' if isinstance(exc,MemoryError) else 'onnx_session_init_failed' if failure_stage=='creating_onnx_session' else 'model_init_failed')
+                self.failed=True;self.load_finished_at=time.monotonic();self.stage='failed';self.stage_started_at=time.monotonic()
+                emit('model_load_failed',stage=failure_stage,error_code=self.error_code,error_type=type(exc).__name__,elapsed_seconds=self.elapsed())
+                raise
+            finally:
+                self.loading=False;stop.set()
 
     def predict(self,path,descriptors):
         if self.session is None:self.load()
