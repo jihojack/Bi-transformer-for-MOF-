@@ -1,0 +1,34 @@
+{
+  "files": {
+    "app/assets/15.DualGas_ALCHEMI_50K_L4_Training.py": {
+      "bytes": 68334,
+      "sha256": "2c8d9ecc44b9189e22573aa71e4cabbef213d5715ab7829dc69d963cd94c7282"
+    },
+    "app/assets/descriptor_preprocessing.joblib": {
+      "bytes": 3562,
+      "sha256": "eddd9b814bffd4788c964429f805d14d01bbd38d16e7273670ea7c98c5d5cffe"
+    },
+    "app/assets/element_property_table_50k.json": {
+      "bytes": 3364,
+      "sha256": "b352317708e3d1a2ebd6ff855e00ef7b8898d19ecb5ab3001a47cbdea6c5e4cd"
+    },
+    "app/assets/metal_soft_cn_reference.json": {
+      "bytes": 748,
+      "sha256": "761a08ed06dbf034778fce23a0830623e17155294204b310d68646213bfa1fd8"
+    },
+    "app/assets/node_feature_preprocessing.npz": {
+      "bytes": 2752,
+      "sha256": "23c070306188c1522667fd1c020b1b369ab161e1f5c1bc279d6370dfeed936ba"
+    },
+    "app/assets/training_configuration.json": {
+      "bytes": 3366,
+      "sha256": "6c711a1ab5095c54898f3dc23e9993d16fb5b90d6e30993c1cb5da45be6a4b4e"
+    }
+  },
+  "private_artifacts": {
+    "app/assets/best_dual_gas_alchemi_50k.pt": {
+      "bytes": 58732271,
+      "sha256": "50067f2f303066bb048dbfeba6cb8d106d8e7a53688fc7a76e07eb3202356b58"
+    }
+  }
+}

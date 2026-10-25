@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this research code or its results, please cite this repository and the original data source."
+type: software
+title: "Bi-transformer-for-MOF: Dual-tower CO2 and CH4 adsorption prediction"
+authors:
+  - name: "jihojack"
+repository-code: "https://github.com/jihojack/Bi-transformer-for-MOF-"
+version: "0.2.0"
+abstract: "A research implementation combining periodic equivariant graph attention and descriptor Transformers for 298 K pure-component CO2 and CH4 adsorption prediction."

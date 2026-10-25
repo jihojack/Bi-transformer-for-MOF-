@@ -1,0 +1,186 @@
+{
+  "private_model_required": true,
+  "cases": 35,
+  "upload_case": 1,
+  "max_absolute_difference_mmol_g": 9.5367431640625e-06,
+  "reference": "Original frozen PyTorch inference and original sklearn preprocessing",
+  "tolerance_mmol_g": 0.0001,
+  "private_model_sha256": "5b7f0f9cf570a24b677763afb59bd0f58889c9eba0feb0d26eafaf97c72d316f",
+  "per_case": [
+    {
+      "mof_id": "hmof-5067709",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 3.0994415283203125e-06
+    },
+    {
+      "mof_id": "hmof-5067709",
+      "case": "surface_area_m2g",
+      "max_absolute_difference_mmol_g": 2.1457672119140625e-06
+    },
+    {
+      "mof_id": "hmof-5067709",
+      "case": "void_fraction",
+      "max_absolute_difference_mmol_g": 9.5367431640625e-07
+    },
+    {
+      "mof_id": "hmof-5067709",
+      "case": "lcd",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-07
+    },
+    {
+      "mof_id": "hmof-5067709",
+      "case": "pld",
+      "max_absolute_difference_mmol_g": 1.6689300537109375e-06
+    },
+    {
+      "mof_id": "hmof-5067709",
+      "case": "all_four",
+      "max_absolute_difference_mmol_g": 1.430511474609375e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "case": "surface_area_m2g",
+      "max_absolute_difference_mmol_g": 1.9073486328125e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "case": "void_fraction",
+      "max_absolute_difference_mmol_g": 8.106231689453125e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "case": "lcd",
+      "max_absolute_difference_mmol_g": 1.9073486328125e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "case": "pld",
+      "max_absolute_difference_mmol_g": 2.86102294921875e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "case": "all_four",
+      "max_absolute_difference_mmol_g": 1.9073486328125e-06
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-07
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "case": "surface_area_m2g",
+      "max_absolute_difference_mmol_g": 1.430511474609375e-06
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "case": "void_fraction",
+      "max_absolute_difference_mmol_g": 9.5367431640625e-07
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "case": "lcd",
+      "max_absolute_difference_mmol_g": 5.960464477539062e-07
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "case": "pld",
+      "max_absolute_difference_mmol_g": 9.5367431640625e-07
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "case": "all_four",
+      "max_absolute_difference_mmol_g": 9.5367431640625e-07
+    },
+    {
+      "mof_id": "hmof-5065497",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 1.6689300537109375e-06
+    },
+    {
+      "mof_id": "hmof-5800",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 8.344650268554688e-07
+    },
+    {
+      "mof_id": "hmof-5005982",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-07
+    },
+    {
+      "mof_id": "hmof-5062473",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 3.5762786865234375e-07
+    },
+    {
+      "mof_id": "hmof-6001409",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 1.0728836059570312e-06
+    },
+    {
+      "mof_id": "hmof-5010298",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 9.5367431640625e-06
+    },
+    {
+      "mof_id": "hmof-5083334",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 3.0994415283203125e-06
+    },
+    {
+      "mof_id": "hmof-1001879",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 8.940696716308594e-08
+    },
+    {
+      "mof_id": "hmof-5060237",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 4.3422915041446686e-08
+    },
+    {
+      "mof_id": "hmof-5036458",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 1.1920928955078125e-06
+    },
+    {
+      "mof_id": "hmof-24979",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 1.430511474609375e-06
+    },
+    {
+      "mof_id": "hmof-5059367",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 2.1457672119140625e-06
+    },
+    {
+      "mof_id": "hmof-16860",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 8.106231689453125e-06
+    },
+    {
+      "mof_id": "hmof-35058",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 1.1920928955078125e-06
+    },
+    {
+      "mof_id": "hmof-5011904",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-06
+    },
+    {
+      "mof_id": "hmof-5038021",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 3.814697265625e-06
+    },
+    {
+      "mof_id": "hmof-5035636",
+      "case": "original",
+      "max_absolute_difference_mmol_g": 5.7220458984375e-06
+    }
+  ]
+}

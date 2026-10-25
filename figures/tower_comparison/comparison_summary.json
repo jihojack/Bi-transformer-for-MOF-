@@ -1,0 +1,22 @@
+{
+  "CO2_fusion_vs_structure": {
+    "min_mae_reduction_pct": 11.626152718049978,
+    "max_mae_reduction_pct": 32.23442470802733,
+    "all_ci95_lower_above_zero": true
+  },
+  "CO2_fusion_vs_descriptor": {
+    "min_mae_reduction_pct": 27.949961845038523,
+    "max_mae_reduction_pct": 29.11977708776581,
+    "all_ci95_lower_above_zero": true
+  },
+  "CH4_fusion_vs_structure": {
+    "min_mae_reduction_pct": 22.856972833667623,
+    "max_mae_reduction_pct": 31.918277106453864,
+    "all_ci95_lower_above_zero": true
+  },
+  "CH4_fusion_vs_descriptor": {
+    "min_mae_reduction_pct": 27.64796238145185,
+    "max_mae_reduction_pct": 29.624138007916063,
+    "all_ci95_lower_above_zero": true
+  }
+}

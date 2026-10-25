@@ -1,0 +1,15 @@
+{
+  "onnx": {
+    "sha256": "5b7f0f9cf570a24b677763afb59bd0f58889c9eba0feb0d26eafaf97c72d316f",
+    "bytes": 58169012,
+    "private": true
+  },
+  "pytorch": {
+    "sha256": "50067f2f303066bb048dbfeba6cb8d106d8e7a53688fc7a76e07eb3202356b58",
+    "bytes": 58732271,
+    "private": true
+  },
+  "outputs": 10,
+  "temperature_K": 298,
+  "note": "Metadata only. Model binaries are private and intentionally absent."
+}

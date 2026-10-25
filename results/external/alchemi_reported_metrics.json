@@ -1,0 +1,28 @@
+{
+  "provenance": {
+    "source": "Researcher-provided Colab console output in this project conversation",
+    "original_colab_json_collected": false,
+    "note": "Per-condition values were printed to six decimals; macro values below were reported at full displayed precision. Do not treat this as a byte-for-byte export of the original Colab metrics JSON."
+  },
+  "n_mofs": 10000,
+  "temperature_K": 298,
+  "device_path": "NVIDIA ALCHEMI preprocessing and frozen-checkpoint reevaluation in Colab",
+  "units": {"rmse": "mmol/g", "mae": "mmol/g"},
+  "per_target": {
+    "co2_q_0p01bar": {"r2": 0.866712, "rmse": 0.067094, "mae": 0.022967},
+    "co2_q_0p05bar": {"r2": 0.905690, "rmse": 0.126134, "mae": 0.061318},
+    "co2_adsorption_0.1bar": {"r2": 0.914818, "rmse": 0.167869, "mae": 0.090647},
+    "co2_adsorption_0.5bar": {"r2": 0.926612, "rmse": 0.325307, "mae": 0.203007},
+    "co2_adsorption_2.5bar": {"r2": 0.958180, "rmse": 0.523860, "mae": 0.369220},
+    "ch4_adsorption_0.05bar": {"r2": 0.899462, "rmse": 0.032007, "mae": 0.010563},
+    "ch4_adsorption_0.5bar": {"r2": 0.938366, "rmse": 0.103249, "mae": 0.053811},
+    "ch4_adsorption_0.9bar": {"r2": 0.944197, "rmse": 0.134990, "mae": 0.076249},
+    "ch4_adsorption_2.5bar": {"r2": 0.955051, "rmse": 0.203576, "mae": 0.130720},
+    "ch4_adsorption_4.5bar": {"r2": 0.962303, "rmse": 0.248420, "mae": 0.167729}
+  },
+  "macro_mean": {
+    "r2": 0.9271391391543771,
+    "rmse": 0.19325066187768575,
+    "mae": 0.11862325983731421
+  }
+}

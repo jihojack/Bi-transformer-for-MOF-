@@ -1,0 +1,27 @@
+{
+  "evaluation_set": "internal held-out test set",
+  "n_mofs": 10000,
+  "mofs_per_quintile": 2000,
+  "bootstrap_resamples": 1000,
+  "bootstrap_seed": 20261025,
+  "predictions_source": "results/internal/test_predictions.csv",
+  "features_source": "figures/structure_error/structure_error_per_mof.csv",
+  "checkpoint_source": "app/assets/best_dual_gas_alchemi_50k.pt",
+  "scale_per_condition_mmol_g": [
+    0.26468425989151,
+    0.601244330406189,
+    0.8341319561004639,
+    1.6116738319396973,
+    2.6017560958862305,
+    0.13632574677467346,
+    0.5725527405738831,
+    0.7687488198280334,
+    1.1759291887283325,
+    1.447681188583374
+  ],
+  "definition": "For each condition: abs(predicted-observed)/max(train_target_std,0.05); mean over 5 pressures per gas, then over MOFs in the group.",
+  "ci_definition": "Pointwise 95% percentile bootstrap CI of the group mean, resampling MOFs within fixed groups; training-seed and bin-boundary uncertainty excluded.",
+  "tie_handling": "Equal-count quintiles from feature ranks(method=first); equal values can be split across adjacent bins.",
+  "max_abs_difference_from_saved_subgroup_results": 1.8107750299201086e-09,
+  "caution": "Descriptive association, not causal or independent feature effects; normalization does not control for subgroup uptake distributions."
+}

@@ -1,0 +1,34 @@
+{
+  "test_mofs": 10000,
+  "bootstrap_resamples": 1000,
+  "ablation_test_mofs": 2000,
+  "fp32_rotation_test_mofs": 200,
+  "best_overall_normalized_rmse_from_ablation_subset": 0.24693573249516748,
+  "fp32_rotation_maximum_difference_mmol_g": 0.0010251998901367188,
+  "fp32_rotation_median_difference_mmol_g": 0.00015795230865478516,
+  "files": [
+    "calibration_bias_and_ranking.csv",
+    "fusion_metric_bootstrap_ci.csv",
+    "grouped_input_ablation.csv",
+    "grouped_input_ablation.png",
+    "internal_applicability_domain.csv",
+    "paired_tower_mae_bootstrap.csv",
+    "prediction_decile_calibration.csv",
+    "prediction_decile_calibration.png",
+    "pure_component_selectivity_proxy_metrics.csv",
+    "pure_component_selectivity_proxy_ranking.csv",
+    "repeated_outlier_audit.csv",
+    "rotation_invariance_fp32.csv",
+    "rotation_invariance_fp32.png",
+    "subgroup_and_applicability_domain.png",
+    "subgroup_robustness.csv",
+    "working_capacity_metrics.csv",
+    "working_capacity_ranking.csv"
+  ],
+  "important_interpretation_notes": [
+    "Pure-component CO2/CH4 uptake ratios are screening proxies, not IAST selectivities.",
+    "Descriptor-distance quintiles are internal novelty diagnostics, not external OOD validation.",
+    "Input ablation is measured on a fixed 2,000-MOF subset to control runtime.",
+    "Bootstrap intervals resample MOFs and do not include training-seed uncertainty."
+  ]
+}

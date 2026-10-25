@@ -1,0 +1,96 @@
+{
+  "onnx_opset": 18,
+  "examples_validated": 20,
+  "max_absolute_difference_mmol_g": 9.5367431640625e-06,
+  "model_sha256": "5b7f0f9cf570a24b677763afb59bd0f58889c9eba0feb0d26eafaf97c72d316f",
+  "model_bytes": 58169012,
+  "reference": "Original frozen PyTorch model, not the export-rewritten model",
+  "graph_preprocessing": "Precomputed only for the 20 provided CIF examples; browser runs the neural network.",
+  "export_rewrites": [
+    "index_add -> scatter_add with expanded indices",
+    "expm1(x) -> exp(x)-1",
+    "tensor len -> dynamic shape[0]"
+  ],
+  "per_example": [
+    {
+      "mof_id": "hmof-5067709",
+      "max_absolute_difference_mmol_g": 3.0994415283203125e-06
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-06
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-07
+    },
+    {
+      "mof_id": "hmof-5065497",
+      "max_absolute_difference_mmol_g": 1.6689300537109375e-06
+    },
+    {
+      "mof_id": "hmof-5800",
+      "max_absolute_difference_mmol_g": 8.344650268554688e-07
+    },
+    {
+      "mof_id": "hmof-5005982",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-07
+    },
+    {
+      "mof_id": "hmof-5062473",
+      "max_absolute_difference_mmol_g": 3.5762786865234375e-07
+    },
+    {
+      "mof_id": "hmof-6001409",
+      "max_absolute_difference_mmol_g": 1.0728836059570312e-06
+    },
+    {
+      "mof_id": "hmof-5010298",
+      "max_absolute_difference_mmol_g": 9.5367431640625e-06
+    },
+    {
+      "mof_id": "hmof-5083334",
+      "max_absolute_difference_mmol_g": 3.0994415283203125e-06
+    },
+    {
+      "mof_id": "hmof-1001879",
+      "max_absolute_difference_mmol_g": 8.940696716308594e-08
+    },
+    {
+      "mof_id": "hmof-5060237",
+      "max_absolute_difference_mmol_g": 4.3422915041446686e-08
+    },
+    {
+      "mof_id": "hmof-5036458",
+      "max_absolute_difference_mmol_g": 1.1920928955078125e-06
+    },
+    {
+      "mof_id": "hmof-24979",
+      "max_absolute_difference_mmol_g": 1.430511474609375e-06
+    },
+    {
+      "mof_id": "hmof-5059367",
+      "max_absolute_difference_mmol_g": 2.1457672119140625e-06
+    },
+    {
+      "mof_id": "hmof-16860",
+      "max_absolute_difference_mmol_g": 8.106231689453125e-06
+    },
+    {
+      "mof_id": "hmof-35058",
+      "max_absolute_difference_mmol_g": 1.1920928955078125e-06
+    },
+    {
+      "mof_id": "hmof-5011904",
+      "max_absolute_difference_mmol_g": 4.76837158203125e-06
+    },
+    {
+      "mof_id": "hmof-5038021",
+      "max_absolute_difference_mmol_g": 3.814697265625e-06
+    },
+    {
+      "mof_id": "hmof-5035636",
+      "max_absolute_difference_mmol_g": 5.7220458984375e-06
+    }
+  ]
+}

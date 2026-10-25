@@ -1,0 +1,31 @@
+descriptor_index,column,group,definition
+1,surface_area_m2g,geometry,MOFX-DB gravimetric surface area (m2/g)
+2,void_fraction,geometry,MOFX-DB void fraction
+3,lcd,geometry,Largest cavity diameter (angstrom)
+4,pld,geometry,Pore-limiting diameter (angstrom)
+5,n_atoms_cif,size,Number of atoms in the parsed CIF unit cell
+6,metal_atom_fraction,metal,Fraction of CIF atoms classified as metals
+7,metal_species_count,metal,Number of distinct metal elements
+8,open_metal_site_proxy_count,metal_oms_proxy,Count of metal atoms with soft CN <= the element-specific training-set 10th percentile
+9,open_metal_site_proxy_fraction,metal_oms_proxy,Fraction of metal atoms satisfying the OMS-proxy criterion
+10,metal_coordination_mean,metal_oms_proxy,Mean soft coordination number over metal atoms
+11,metal_coordination_deficit_mean,metal_oms_proxy,"Mean max(training element-specific median soft CN - atom soft CN, 0) over metal atoms"
+12,ligand_polar_atom_fraction,ligand_chemistry_proxy,Fraction of nonmetal atoms that are N/O/F/P/S/Cl/Br/I
+13,ligand_bond_en_difference_mean,ligand_chemistry_proxy,Bond-score-weighted mean absolute electronegativity difference on nonmetal-nonmetal candidate edges
+14,pore_proxy_polar_atom_fraction,pore_surface_proxy,Polar-atom fraction among atoms in the within-MOF lowest local-density-r3 quartile
+15,pore_proxy_heteroatom_fraction,pore_surface_proxy,"Nonmetal, non-C, non-H fraction in the within-MOF lowest local-density-r3 quartile"
+16,pore_proxy_metal_fraction,pore_surface_proxy,Metal fraction in the within-MOF lowest local-density-r3 quartile
+17,pore_proxy_electronegativity_mean,pore_surface_proxy,Mean Pauling electronegativity in the within-MOF lowest local-density-r3 quartile
+18,local_density_r3_mean,local_density,Mean local-density-r3 over CIF atoms
+19,local_density_r3_std,local_density,Standard deviation of local-density-r3
+20,local_density_r6_mean,local_density,Mean local-density-r6 over CIF atoms
+21,local_density_r6_std,local_density,Standard deviation of local-density-r6
+22,spatial_only_edge_fraction,edge_summary,Fraction of directed periodic edges with relation class 0
+23,nonmetal_nonmetal_bond_fraction,edge_summary,Fraction of directed periodic edges with relation class 1
+24,metal_nonmetal_bond_fraction,edge_summary,Fraction of directed periodic edges with relation class 2
+25,metal_metal_bond_fraction,edge_summary,Fraction of directed periodic edges with relation class 3
+26,mean_edge_bond_score,edge_summary,Mean soft covalent-radius prior over directed periodic edges
+27,metal_type_V,metal_one_hot,Vanadium present in the CIF
+28,metal_type_Cu,metal_one_hot,Copper present in the CIF
+29,metal_type_Zn,metal_one_hot,Zinc present in the CIF
+30,metal_type_Zr,metal_one_hot,Zirconium present in the CIF

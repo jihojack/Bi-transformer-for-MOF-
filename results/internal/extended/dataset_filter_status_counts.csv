@@ -1,0 +1,12 @@
+status,count,exclusive_first_failure,definition
+missing_cif,0,True,No matching CIF member in the source archive
+invalid_json,0,True,JSON decoding or archive-read failure
+missing_descriptor,0,True,At least one required geometry descriptor is absent or nonfinite
+invalid_descriptor,6266,True,Surface area/LCD/PLD <= 0 or void fraction < 0
+missing_co2_curve,0,True,"No CO2 curve simultaneously satisfying gas identity, 298+/-0.5 K, compatible units, and all five pressure points"
+missing_ch4_curve,0,True,"No CH4 curve simultaneously satisfying gas identity, 298+/-0.5 K, compatible units, and all five pressure points"
+negative_uptake,0,True,At least one selected CO2/CH4 uptake is negative
+nonmonotonic_co2,555,True,CO2 uptake decreases across the selected increasing pressures
+nonmonotonic_ch4,785,True,CH4 uptake decreases across the selected increasing pressures
+co2_0p5bar_outlier,2,True,CO2 uptake at 0.5 bar exceeds 20 mmol/g
+valid,130044,True,Passed every paired-gas builder filter

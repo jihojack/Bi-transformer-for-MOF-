@@ -1,0 +1,11 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.ipynb text eol=lf
+*.bat text eol=crlf
+*.svg -whitespace
+# Byte-exact frozen assets/CIFs: SHA-256 must survive Windows/Linux checkout.
+app/assets/* -text
+app/assets/asset_manifest.json text eol=lf
+*.cif -text

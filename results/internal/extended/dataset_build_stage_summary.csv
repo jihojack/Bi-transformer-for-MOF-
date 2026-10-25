@@ -1,0 +1,12 @@
+stage,count,definition
+source_archive_json,137652,All source JSON records
+co2_five_pressure_valid,130829,Passed the CO2-only 30K builder filters
+paired_co2_ch4_valid,130044,Passed the paired CO2/CH4 builder filters
+legacy_10k_after_monotonic_filter,9982,Original retained 10K dataset
+co2_dataset_30k,30000,CO2-only dataset after expansion
+co2_30k_retained_in_paired_pool,29787,Rows retained when extending to paired gases
+new_rows_added_for_50k,20213,New paired-gas stratified sample
+final_dataset_50k,50000,Final unique MOFs
+train_split,35000,Fixed training split
+validation_split,5000,Fixed validation split
+test_split,10000,Independent internal test split

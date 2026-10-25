@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f7">
+  <link rel="icon" href="data:,">
+  <title>MOF 흡착량 예측</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20261023-2') }}">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>MOF 흡착량 예측</h1>
+      <p>CO₂ / CH₄ · 298 K · 단일 CIF 추론</p>
+    </div>
+    <div id="model-status" class="status loading"><i></i><span>모델 로딩 중</span></div>
+  </header>
+
+  <main class="layout">
+    <form id="predict-form" class="panel input-panel">
+      <div class="panel-title">
+        <h2>입력</h2>
+        <button id="load-example" type="button" class="secondary-button">예제 불러오기</button>
+      </div>
+
+      <label id="drop-zone" class="file-field">
+        <input id="cif-input" name="cif" type="file" accept=".cif" required>
+        <span id="file-title">CIF 파일 선택</span>
+        <small id="file-detail">클릭하거나 파일을 끌어 놓으세요.</small>
+      </label>
+
+      <fieldset>
+        <legend>전역 구조 기술자</legend>
+        <p class="field-note">학습 데이터와 같은 정의로 계산한 값을 입력합니다.</p>
+        <div class="field-grid">
+          <label><span>표면적 <small>m²/g</small></span><input name="surface_area_m2g" type="number" min="0.000001" step="any" required></label>
+          <label><span>공극률 <small>0–1</small></span><input name="void_fraction" type="number" min="0.000001" max="1" step="any" required></label>
+          <label><span>LCD <small>Å</small></span><input name="lcd" type="number" min="0.000001" step="any" required></label>
+          <label><span>PLD <small>Å</small></span><input name="pld" type="number" min="0.000001" step="any" required></label>
+        </div>
+      </fieldset>
+
+      <button id="predict-button" class="primary-button" type="submit" disabled>예측 실행</button>
+      <p class="local-note">입력 파일과 결과는 이 컴퓨터에서만 처리됩니다.</p>
+    </form>
+
+    <section class="panel result-panel" aria-live="polite">
+      <div class="panel-title">
+        <h2>결과</h2>
+        <button id="export-button" type="button" class="secondary-button" hidden>CSV 저장</button>
+      </div>
+
+      <div id="empty-state" class="state-box"><p>입력값을 설정한 뒤 <b>예측 실행</b>을 누르세요.</p></div>
+      <div id="busy-state" class="state-box" hidden><div class="spinner"></div><p>구조 그래프 계산 및 모델 추론 중…</p></div>
+      <div id="error-state" class="error-box" hidden><b>예측 실패</b><p id="error-message"></p></div>
+
+      <div id="result-content" hidden>
+        <div class="run-summary">
+          <div><span>파일</span><b id="result-filename">—</b></div>
+          <div><span>원자</span><b id="stat-atoms">—</b></div>
+          <div><span>주기 간선</span><b id="stat-edges">—</b></div>
+          <div><span>원소</span><b id="stat-elements">—</b></div>
+          <div><span>계산 시간</span><b id="stat-time">—</b></div>
+        </div>
+
+        <div class="gas-tabs" role="tablist">
+          <button type="button" class="active" data-gas="CO2">CO₂</button>
+          <button type="button" data-gas="CH4">CH₄</button>
+        </div>
+
+        <div class="chart-header"><h3 id="gas-title">CO₂ · 298 K</h3><span>흡착량 (mmol g⁻¹)</span></div>
+        <div id="isotherm-chart" class="chart" role="img" aria-label="예측 흡착 등온선"></div>
+
+        <table>
+          <thead><tr><th>기체</th><th>압력 (bar)</th><th>예측 흡착량 (mmol g⁻¹)</th></tr></thead>
+          <tbody id="prediction-table"></tbody>
+        </table>
+        <p class="scope-note">이 값은 hMOF/GCMC 학습 분포에 기반한 모델 예측값이며 실험 측정값이 아닙니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js', v='20261023-2') }}"></script>
+</body>
+</html>

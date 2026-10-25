@@ -1,0 +1,58 @@
+{
+  "purpose": "Colab GPU ALCHEMI preprocessing and leakage-separated external evaluation",
+  "created_date": "2026-07-27",
+  "sample_size": 10000,
+  "sampling": "Uniform random sampling without replacement from valid MOFX-DB records remaining after exclusion of the full original 50K; seed 20260727",
+  "input_rows": 10000,
+  "label_rows": 10000,
+  "cif_entries": 10000,
+  "cif_entries_at_zip_root": true,
+  "zip_crc_test_passed": true,
+  "unique_mof_ids": 10000,
+  "original_50k_overlap": 0,
+  "input_label_id_order_identical": true,
+  "labels_absent_from_input_csv": true,
+  "all_required_values_finite": true,
+  "selected_id_order_sha256": "38c564cdc1e5d66e445707ab7432ad2645b647abd9f83f41514ddf16f3f4cc74",
+  "protocol": "Use the inputs CSV and CIF ZIP for ALCHEMI preprocessing and frozen-model prediction. Save predictions before reading the private-label CSV. Then merge labels by mof_id for evaluation.",
+  "input_columns": [
+    "selection_rank",
+    "mof_id",
+    "surface_area_m2g",
+    "void_fraction",
+    "lcd",
+    "pld",
+    "elements"
+  ],
+  "label_columns": [
+    "selection_rank",
+    "mof_id",
+    "co2_q_0p01bar",
+    "co2_q_0p05bar",
+    "co2_adsorption_0.1bar",
+    "co2_adsorption_0.5bar",
+    "co2_adsorption_2.5bar",
+    "ch4_adsorption_0.05bar",
+    "ch4_adsorption_0.5bar",
+    "ch4_adsorption_0.9bar",
+    "ch4_adsorption_2.5bar",
+    "ch4_adsorption_4.5bar"
+  ],
+  "target_columns": [
+    "co2_q_0p01bar",
+    "co2_q_0p05bar",
+    "co2_adsorption_0.1bar",
+    "co2_adsorption_0.5bar",
+    "co2_adsorption_2.5bar",
+    "ch4_adsorption_0.05bar",
+    "ch4_adsorption_0.5bar",
+    "ch4_adsorption_0.9bar",
+    "ch4_adsorption_2.5bar",
+    "ch4_adsorption_4.5bar"
+  ],
+  "files_sha256": {
+    "MOF_external_10K_inputs.csv": "3afbdf0785c49dbdb26f17c06300e67e2607a71f433d7830ae744f3bd7c7fdc8",
+    "MOF_external_10K_labels_private.csv": "2d99c19ebf5dcc26bff9e01655df501b37b02c5e9b46722d49b1cc0e669b16cb",
+    "MOF_external_10K_CIF.zip": "dd904977dc8e913942f91931ae2acd64b7070d1c953bed6e33ba1b6c9a7fd75d"
+  }
+}

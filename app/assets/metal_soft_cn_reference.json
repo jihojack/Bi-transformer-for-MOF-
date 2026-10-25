@@ -1,0 +1,35 @@
+{
+  "scope": "training split only",
+  "by_atomic_number": {
+    "23": {
+      "symbol": "V",
+      "p10": 8.816078186035156,
+      "median": 8.819121837615967,
+      "n_atoms": 4680
+    },
+    "29": {
+      "symbol": "Cu",
+      "p10": 6.727179050445557,
+      "median": 7.09948468208313,
+      "n_atoms": 30116
+    },
+    "30": {
+      "symbol": "Zn",
+      "p10": 5.476083278656006,
+      "median": 5.505622863769531,
+      "n_atoms": 130002
+    },
+    "40": {
+      "symbol": "Zr",
+      "p10": 13.558724403381348,
+      "median": 13.558836936950684,
+      "n_atoms": 8910
+    }
+  },
+  "fallback_all_training_metals": {
+    "symbol": "TRAIN_ALL_METALS",
+    "p10": 5.4763994216918945,
+    "median": 5.529323577880859,
+    "n_atoms": 173708
+  }
+}

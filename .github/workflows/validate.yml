@@ -1,0 +1,24 @@
+name: Validate public reproduction package
+on: [push, pull_request]
+jobs:
+  source-and-server-contract:
+    runs-on: ubuntu-latest
+    env:
+      MOF_SKIP_WARM: "1"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify public assets, splits, notebooks and no weight binaries
+        run: |
+          python tools/verify_repository.py
+          python tools/verify_public_boundary.py
+      - name: Install lean server dependencies (no private model)
+        run: pip install -r requirements-server.txt
+      - name: Test API contracts and native CIF preprocessing without weights
+        run: python -m unittest discover -s tests -v
+      - name: Check frontend syntax
+        run: node --check frontend/app.js

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: mof-private-inference
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-server.txt
+    startCommand: python tools/download_private_model.py && gunicorn --workers 1 --threads 2 --timeout 180 --bind 0.0.0.0:$PORT server.app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+      - key: MOF_MODEL_PATH
+        value: /tmp/mof-private/model.onnx
+      - key: MOF_MODEL_URL
+        sync: false
+      - key: MOF_MODEL_BEARER_TOKEN
+        sync: false
+      - key: MOF_ALLOWED_ORIGINS
+        sync: false
+      - key: MOF_MAX_ATOMS
+        value: "200"

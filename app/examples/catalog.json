@@ -1,0 +1,685 @@
+{
+  "count": 20,
+  "selection_rule": "First 20 primary external-sample rows, ordered by selection_rank, with <=200 atoms and positive valid input descriptors; no error-based selection.",
+  "source": "additional external 10K, disjoint from all original 50K",
+  "graph_preprocessing": "Frozen CPU-compatible periodic graph construction and frozen feature preprocessing, performed before browser deployment.",
+  "examples": [
+    {
+      "mof_id": "hmof-5067709",
+      "selection_rank": 0,
+      "descriptors": {
+        "surface_area_m2g": 5509.9,
+        "void_fraction": 0.875614,
+        "lcd": 16.25,
+        "pld": 14.75
+      },
+      "atoms": 137,
+      "periodic_edges": 4336,
+      "elements": [
+        "C",
+        "Cu",
+        "H",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-5067709.cif",
+      "graph": "graphs/hmof-5067709.json",
+      "cif_sha256": "3b4d3ac0ec354e3b6aff261a0761436d6bb3cbbd5e107c5140e535f81902b845",
+      "reference_output": [
+        0.01833050511777401,
+        0.09228206425905228,
+        0.18757206201553345,
+        0.9397379755973816,
+        4.340362071990967,
+        0.0384717732667923,
+        0.39750462770462036,
+        0.7140058875083923,
+        1.933136224746704,
+        3.3641068935394287
+      ]
+    },
+    {
+      "mof_id": "hmof-5027991",
+      "selection_rank": 1,
+      "descriptors": {
+        "surface_area_m2g": 1901.0,
+        "void_fraction": 0.639665,
+        "lcd": 7.25,
+        "pld": 5.75
+      },
+      "atoms": 190,
+      "periodic_edges": 5992,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5027991.cif",
+      "graph": "graphs/hmof-5027991.json",
+      "cif_sha256": "f0794e26e2d868635e279fe7f5884a4da2980a2499846bd6c6350ad1a6050d09",
+      "reference_output": [
+        0.08863626420497894,
+        0.4268442392349243,
+        0.8050714731216431,
+        3.170661687850952,
+        8.216751098632812,
+        0.06543712317943573,
+        0.6312406659126282,
+        1.0706653594970703,
+        2.506425619125366,
+        3.7497823238372803
+      ]
+    },
+    {
+      "mof_id": "hmof-5031054",
+      "selection_rank": 3,
+      "descriptors": {
+        "surface_area_m2g": 4971.0,
+        "void_fraction": 0.914041,
+        "lcd": 18.25,
+        "pld": 15.75
+      },
+      "atoms": 159,
+      "periodic_edges": 4297,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5031054.cif",
+      "graph": "graphs/hmof-5031054.json",
+      "cif_sha256": "18f36343440eabfab5e895df7c0afb1fdf11c92e731adcdcaac0e42c622c9ef3",
+      "reference_output": [
+        0.01235074270516634,
+        0.06237277761101723,
+        0.12598545849323273,
+        0.6120354533195496,
+        2.7603297233581543,
+        0.023741377517580986,
+        0.24570541083812714,
+        0.4402158260345459,
+        1.2020020484924316,
+        2.1263060569763184
+      ]
+    },
+    {
+      "mof_id": "hmof-5065497",
+      "selection_rank": 4,
+      "descriptors": {
+        "surface_area_m2g": 4872.9,
+        "void_fraction": 0.826585,
+        "lcd": 11.75,
+        "pld": 10.75
+      },
+      "atoms": 30,
+      "periodic_edges": 692,
+      "elements": [
+        "C",
+        "Cu",
+        "H",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-5065497.cif",
+      "graph": "graphs/hmof-5065497.json",
+      "cif_sha256": "c6262ba17c55a0fbb2d68589b8c6f45b0099827c44c91e4f10fea7c3b4e9c485",
+      "reference_output": [
+        0.004864936228841543,
+        0.02365909144282341,
+        0.0464978851377964,
+        0.24124102294445038,
+        1.2985833883285522,
+        0.015757005661725998,
+        0.15828225016593933,
+        0.28631648421287537,
+        0.7997583150863647,
+        1.461165189743042
+      ]
+    },
+    {
+      "mof_id": "hmof-5800",
+      "selection_rank": 5,
+      "descriptors": {
+        "surface_area_m2g": 4993.6,
+        "void_fraction": 0.843601,
+        "lcd": 15.75,
+        "pld": 14.25
+      },
+      "atoms": 103,
+      "periodic_edges": 2794,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5800.cif",
+      "graph": "graphs/hmof-5800.json",
+      "cif_sha256": "585c877096b853fc742975680de1857e487390f2181bf7b6a8ec717ef525739e",
+      "reference_output": [
+        0.015162586234509945,
+        0.07703952491283417,
+        0.15448230504989624,
+        0.7548181414604187,
+        3.1862576007843018,
+        0.021519429981708527,
+        0.22470228374004364,
+        0.4027263820171356,
+        1.1092427968978882,
+        1.953555941581726
+      ]
+    },
+    {
+      "mof_id": "hmof-5005982",
+      "selection_rank": 7,
+      "descriptors": {
+        "surface_area_m2g": 4814.5,
+        "void_fraction": 0.83738,
+        "lcd": 12.75,
+        "pld": 11.75
+      },
+      "atoms": 55,
+      "periodic_edges": 1300,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5005982.cif",
+      "graph": "graphs/hmof-5005982.json",
+      "cif_sha256": "940b2782ab86975d8ffb8bde7a8ac03b23ff45ef9f881ead225bd00fc0c659f3",
+      "reference_output": [
+        0.012006839737296104,
+        0.06173292547464371,
+        0.12484630197286606,
+        0.6359863877296448,
+        2.835733652114868,
+        0.015049188397824764,
+        0.15479180216789246,
+        0.27743178606033325,
+        0.7778277397155762,
+        1.390682339668274
+      ]
+    },
+    {
+      "mof_id": "hmof-5062473",
+      "selection_rank": 8,
+      "descriptors": {
+        "surface_area_m2g": 5661.5,
+        "void_fraction": 0.87468,
+        "lcd": 16.25,
+        "pld": 14.75
+      },
+      "atoms": 32,
+      "periodic_edges": 666,
+      "elements": [
+        "C",
+        "Cu",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-5062473.cif",
+      "graph": "graphs/hmof-5062473.json",
+      "cif_sha256": "7abb7859b33c3b22e66a782e05fd1dc3c498c64bc7a7fb3523ad0c7eec9e26ac",
+      "reference_output": [
+        0.004790649749338627,
+        0.021576516330242157,
+        0.04379182681441307,
+        0.21778415143489838,
+        1.1253019571304321,
+        0.01571446843445301,
+        0.15840697288513184,
+        0.2835826873779297,
+        0.7952904105186462,
+        1.4506627321243286
+      ]
+    },
+    {
+      "mof_id": "hmof-6001409",
+      "selection_rank": 9,
+      "descriptors": {
+        "surface_area_m2g": 391.6,
+        "void_fraction": 0.330948,
+        "lcd": 4.25,
+        "pld": 3.25
+      },
+      "atoms": 52,
+      "periodic_edges": 1664,
+      "elements": [
+        "C",
+        "O",
+        "V"
+      ],
+      "cif": "cifs/hmof-6001409.cif",
+      "graph": "graphs/hmof-6001409.json",
+      "cif_sha256": "4768402fe1bce0a53f1fe0a17cf37cabc99e4fb1c593c3a743e757ad7f5319e1",
+      "reference_output": [
+        0.011057605966925621,
+        0.05609295889735222,
+        0.11254145205020905,
+        0.5301559567451477,
+        1.8838852643966675,
+        0.011374000459909439,
+        0.09809372574090958,
+        0.1581915020942688,
+        0.4474193751811981,
+        0.7585419416427612
+      ]
+    },
+    {
+      "mof_id": "hmof-5010298",
+      "selection_rank": 10,
+      "descriptors": {
+        "surface_area_m2g": 3031.1,
+        "void_fraction": 0.738828,
+        "lcd": 10.25,
+        "pld": 9.25
+      },
+      "atoms": 129,
+      "periodic_edges": 4115,
+      "elements": [
+        "C",
+        "H",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5010298.cif",
+      "graph": "graphs/hmof-5010298.json",
+      "cif_sha256": "67658fdc842968f5d04199b89be5755dd8616ff2bf755f6c17d4d64622b289aa",
+      "reference_output": [
+        0.05201304703950882,
+        0.2587754428386688,
+        0.5081184506416321,
+        2.225346565246582,
+        8.824082374572754,
+        0.05365751311182976,
+        0.5477226376533508,
+        0.9731640815734863,
+        2.5237269401550293,
+        4.221288204193115
+      ]
+    },
+    {
+      "mof_id": "hmof-5083334",
+      "selection_rank": 11,
+      "descriptors": {
+        "surface_area_m2g": 4327.2,
+        "void_fraction": 0.946063,
+        "lcd": 24.75,
+        "pld": 24.75
+      },
+      "atoms": 188,
+      "periodic_edges": 5149,
+      "elements": [
+        "C",
+        "Cl",
+        "Cu",
+        "H",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-5083334.cif",
+      "graph": "graphs/hmof-5083334.json",
+      "cif_sha256": "3624ed7a55999eaf693962928464499edf598db220df2f3329f5bf301e46b984",
+      "reference_output": [
+        0.012127095833420753,
+        0.060866549611091614,
+        0.12199579924345016,
+        0.6247137784957886,
+        3.225412607192993,
+        0.03029000386595726,
+        0.30575162172317505,
+        0.5471864342689514,
+        1.4899946451187134,
+        2.6276373863220215
+      ]
+    },
+    {
+      "mof_id": "hmof-1001879",
+      "selection_rank": 12,
+      "descriptors": {
+        "surface_area_m2g": 89.1,
+        "void_fraction": 0.205123,
+        "lcd": 4.25,
+        "pld": 2.75
+      },
+      "atoms": 32,
+      "periodic_edges": 1024,
+      "elements": [
+        "C",
+        "O",
+        "V"
+      ],
+      "cif": "cifs/hmof-1001879.cif",
+      "graph": "graphs/hmof-1001879.json",
+      "cif_sha256": "40a2907f2e3f81607febaf9ecd37e73609f94bfe5dc32948be4dd0fa0f553048",
+      "reference_output": [
+        0.0011464502895250916,
+        0.006648727227002382,
+        0.01383974775671959,
+        0.09102705121040344,
+        0.38682234287261963,
+        0.0007792490068823099,
+        0.0049232495948672295,
+        0.011893687769770622,
+        0.032187219709157944,
+        0.0569925382733345
+      ]
+    },
+    {
+      "mof_id": "hmof-5060237",
+      "selection_rank": 15,
+      "descriptors": {
+        "surface_area_m2g": 32.0,
+        "void_fraction": 0.138836,
+        "lcd": 3.75,
+        "pld": 2.25
+      },
+      "atoms": 78,
+      "periodic_edges": 2496,
+      "elements": [
+        "C",
+        "Cu",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-5060237.cif",
+      "graph": "graphs/hmof-5060237.json",
+      "cif_sha256": "ccd1cd56bebd8a00ccabd49cd8f8bc469e4cfbb2cf69d233eaeb2849113124ad",
+      "reference_output": [
+        0.0005593276000581682,
+        0.0008308925898745656,
+        0.001397414249368012,
+        0.0019247516756877303,
+        0.004435798618942499,
+        0.0004728904750663787,
+        0.0011091666528955102,
+        0.0020794994197785854,
+        0.0036805083509534597,
+        0.006704309023916721
+      ]
+    },
+    {
+      "mof_id": "hmof-5036458",
+      "selection_rank": 16,
+      "descriptors": {
+        "surface_area_m2g": 4910.6,
+        "void_fraction": 0.728883,
+        "lcd": 6.75,
+        "pld": 5.25
+      },
+      "atoms": 100,
+      "periodic_edges": 2462,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5036458.cif",
+      "graph": "graphs/hmof-5036458.json",
+      "cif_sha256": "fb00c7ea411d683c1f288965039fa1d8c7d890c935bc9a63612a7484b2eb9eb4",
+      "reference_output": [
+        0.015251596458256245,
+        0.0793381854891777,
+        0.1588800847530365,
+        0.8474305868148804,
+        5.060581207275391,
+        0.03758053854107857,
+        0.3804321885108948,
+        0.6749134659767151,
+        1.8281537294387817,
+        3.1756598949432373
+      ]
+    },
+    {
+      "mof_id": "hmof-24979",
+      "selection_rank": 17,
+      "descriptors": {
+        "surface_area_m2g": 3684.4,
+        "void_fraction": 0.706665,
+        "lcd": 9.75,
+        "pld": 5.75
+      },
+      "atoms": 85,
+      "periodic_edges": 2565,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-24979.cif",
+      "graph": "graphs/hmof-24979.json",
+      "cif_sha256": "57b39d9da3a1e0300c290750262536a91ce31a571f5829323a187779f1f08622",
+      "reference_output": [
+        0.017497701570391655,
+        0.09021937102079391,
+        0.18083555996418,
+        0.9409493207931519,
+        4.696073532104492,
+        0.04189498350024223,
+        0.4265229105949402,
+        0.756622850894928,
+        1.9663853645324707,
+        3.2577662467956543
+      ]
+    },
+    {
+      "mof_id": "hmof-5059367",
+      "selection_rank": 19,
+      "descriptors": {
+        "surface_area_m2g": 1081.5,
+        "void_fraction": 0.41502,
+        "lcd": 5.25,
+        "pld": 4.75
+      },
+      "atoms": 168,
+      "periodic_edges": 5376,
+      "elements": [
+        "C",
+        "Cu",
+        "F",
+        "H",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-5059367.cif",
+      "graph": "graphs/hmof-5059367.json",
+      "cif_sha256": "23c3a5c4d32c703bbb3e81c566a6249cdf937de44bfcde307ecc162f9392f84e",
+      "reference_output": [
+        0.024885376915335655,
+        0.1254279613494873,
+        0.24809135496616364,
+        1.1115740537643433,
+        3.3802664279937744,
+        0.03130779415369034,
+        0.2965507507324219,
+        0.5111628770828247,
+        1.1385656595230103,
+        1.6612468957901
+      ]
+    },
+    {
+      "mof_id": "hmof-16860",
+      "selection_rank": 20,
+      "descriptors": {
+        "surface_area_m2g": 2968.9,
+        "void_fraction": 0.829444,
+        "lcd": 11.75,
+        "pld": 10.75
+      },
+      "atoms": 74,
+      "periodic_edges": 2109,
+      "elements": [
+        "C",
+        "Cl",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-16860.cif",
+      "graph": "graphs/hmof-16860.json",
+      "cif_sha256": "f44736b11c042424edcb9d008dfa5c9713e9e065de6ff711918d2d2e4bc12386",
+      "reference_output": [
+        0.01848488114774227,
+        0.09841553121805191,
+        0.19683879613876343,
+        1.0370848178863525,
+        5.771454334259033,
+        0.02992190420627594,
+        0.3162006437778473,
+        0.5624070763587952,
+        1.4941518306732178,
+        2.5214102268218994
+      ]
+    },
+    {
+      "mof_id": "hmof-35058",
+      "selection_rank": 21,
+      "descriptors": {
+        "surface_area_m2g": 6248.1,
+        "void_fraction": 0.86364,
+        "lcd": 13.25,
+        "pld": 12.25
+      },
+      "atoms": 74,
+      "periodic_edges": 1859,
+      "elements": [
+        "C",
+        "Cu",
+        "H",
+        "N",
+        "O"
+      ],
+      "cif": "cifs/hmof-35058.cif",
+      "graph": "graphs/hmof-35058.json",
+      "cif_sha256": "8431caa66b6c6df80af1d33f6cad7611a0d2d1d6999dcc4500edad29c5e0255c",
+      "reference_output": [
+        0.008914054371416569,
+        0.046008311212062836,
+        0.09087550640106201,
+        0.4720597267150879,
+        2.5143213272094727,
+        0.025708943605422974,
+        0.26481005549430847,
+        0.4831688702106476,
+        1.359730839729309,
+        2.431471109390259
+      ]
+    },
+    {
+      "mof_id": "hmof-5011904",
+      "selection_rank": 22,
+      "descriptors": {
+        "surface_area_m2g": 4807.2,
+        "void_fraction": 0.750464,
+        "lcd": 9.25,
+        "pld": 6.25
+      },
+      "atoms": 182,
+      "periodic_edges": 4542,
+      "elements": [
+        "C",
+        "F",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5011904.cif",
+      "graph": "graphs/hmof-5011904.json",
+      "cif_sha256": "3bf5ad132665fea2a75b9f1014a6ffac6f38b1aeff086762fa3f769e39798e85",
+      "reference_output": [
+        0.040393952280282974,
+        0.20318810641765594,
+        0.3975183963775635,
+        1.8355798721313477,
+        9.826879501342773,
+        0.02188492752611637,
+        0.2316334843635559,
+        0.4155747890472412,
+        1.1318422555923462,
+        2.033583402633667
+      ]
+    },
+    {
+      "mof_id": "hmof-5038021",
+      "selection_rank": 24,
+      "descriptors": {
+        "surface_area_m2g": 3923.8,
+        "void_fraction": 0.777581,
+        "lcd": 10.75,
+        "pld": 9.75
+      },
+      "atoms": 80,
+      "periodic_edges": 2470,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5038021.cif",
+      "graph": "graphs/hmof-5038021.json",
+      "cif_sha256": "454d4b055fcb3910f747d23e35f6682438ef010cc2b5bce6e70a897efd5dfe05",
+      "reference_output": [
+        0.016752438619732857,
+        0.08663534373044968,
+        0.17466506361961365,
+        0.9100546836853027,
+        5.477534770965576,
+        0.03656446561217308,
+        0.37946343421936035,
+        0.6832032203674316,
+        1.8622617721557617,
+        3.2355523109436035
+      ]
+    },
+    {
+      "mof_id": "hmof-5035636",
+      "selection_rank": 25,
+      "descriptors": {
+        "surface_area_m2g": 3225.1,
+        "void_fraction": 0.711363,
+        "lcd": 9.25,
+        "pld": 8.25
+      },
+      "atoms": 84,
+      "periodic_edges": 2569,
+      "elements": [
+        "C",
+        "H",
+        "N",
+        "O",
+        "Zn"
+      ],
+      "cif": "cifs/hmof-5035636.cif",
+      "graph": "graphs/hmof-5035636.json",
+      "cif_sha256": "85525a0c113b4b3a10b8448ea265f9b0c6ac163d984db02a1ae303ad939a9e3a",
+      "reference_output": [
+        0.022680476307868958,
+        0.11771396547555923,
+        0.23722800612449646,
+        1.254746675491333,
+        6.606628894805908,
+        0.04668112471699715,
+        0.4795336425304413,
+        0.8521330952644348,
+        2.2483503818511963,
+        3.759399652481079
+      ]
+    }
+  ]
+}

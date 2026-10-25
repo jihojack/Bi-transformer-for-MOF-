@@ -1,0 +1,17 @@
+.git
+.env
+.env.*
+private
+**/*.pt
+**/*.pth
+**/*.onnx
+**/*.bin
+**/*.safetensors
+**/*.zip
+outputs
+data/raw
+data/processed
+tests
+figures
+.venv
+__pycache__

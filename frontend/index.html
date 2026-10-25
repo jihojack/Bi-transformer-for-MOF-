@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"><title>MOF 흡착량 예측 · 서버 추론</title></head>
+<body>
+<header><div><h1>MOF 흡착량 예측</h1><p>CO₂ / CH₄ · 298 K · 비공개 모델 서버 추론</p></div><span id="status" role="status">서버 확인 중</span></header>
+<main>
+  <section class="panel controls">
+    <h2>구조 입력</h2>
+    <div class="tabs"><button type="button" class="tab active" data-mode="example">예제 20개</button><button type="button" class="tab" data-mode="upload">CIF 업로드</button></div>
+    <div id="example-input"><label for="example">MOF 예제</label><select id="example" disabled></select><div class="links"><a id="cif-link" download>CIF 내려받기</a></div><p class="muted">기존 50K와 겹치지 않는 추가 평가군에서 선정했습니다.</p></div>
+    <div id="upload-input" hidden><label for="cif">CIF 파일 · 최대 2 MB</label><input id="cif" type="file" accept=".cif"><p id="file-info" class="muted">파일과 입력값을 추론 서버로 전송합니다. 요청이 끝나면 서버의 임시 파일은 삭제됩니다.</p><p id="limits" class="muted"></p></div>
+    <form id="descriptor-form"><div class="section-head"><h3>전역 구조 기술자</h3><button id="reset" type="button" class="secondary">원래 값</button></div>
+      <div class="descriptor-grid">
+        <label for="surface_area_m2g">표면적 <small>m²/g</small><input id="surface_area_m2g" type="number" min="0.000001" step="any" required></label>
+        <label for="void_fraction">공극률 <small>0–1</small><input id="void_fraction" type="number" min="0.000001" max="1" step="any" required></label>
+        <label for="lcd">LCD <small>Å</small><input id="lcd" type="number" min="0.000001" step="any" required></label>
+        <label for="pld">PLD <small>Å</small><input id="pld" type="number" min="0.000001" step="any" required></label>
+      </div>
+    </form>
+    <p id="input-note" class="muted"></p>
+    <button id="predict" disabled>예측 실행</button>
+    <div id="batch-controls"><button id="batch" class="secondary" disabled>20개 원래 값으로 순차 예측</button></div>
+    <button id="stop" class="secondary" hidden>현재 예측 후 중지</button>
+    <p id="progress" class="muted" role="status"></p>
+    <button id="check-server" class="secondary">서버 상태 확인</button>
+    <details><summary>모델과 데이터 처리</summary><p>모델 가중치·ONNX 파일을 이 브라우저로 내려받지 않습니다. 서버에서 CIF의 원자 구조와 기술자를 분석하고 예측값만 반환합니다.</p><p>표면적·공극률·LCD·PLD는 자동 계산하지 않으므로 해당 CIF와 같은 정의의 수치를 입력하세요. 기존 CIF에 임의의 값을 넣는 경우 입력 민감도 탐색으로 해석해야 합니다.</p><p>현재 동결된 원소 표는 Br, C, Cl, Cu, F, H, N, O, V, Zn, Zr을 지원합니다. 부분 점유 구조·여러 구조가 함께 든 CIF는 지원하지 않습니다. 실제 실험 MOF에 대한 정확도는 별도 검증이 필요합니다.</p></details>
+  </section>
+  <section class="panel results" aria-live="polite">
+    <div class="section-head"><h2>예측 결과</h2><button id="csv" class="secondary" disabled>전체 CSV 저장</button></div>
+    <div id="result-nav" hidden><label for="result-select">완료된 결과 선택</label><div class="result-nav"><button id="previous" class="secondary" aria-label="이전 결과">←</button><select id="result-select"></select><button id="next" class="secondary" aria-label="다음 결과">→</button></div></div>
+    <div id="error" role="alert" hidden></div><p id="empty">아직 실행한 예측이 없습니다.</p>
+    <div id="output" hidden><div class="summary"><strong id="result-name"></strong><span id="timing"></span></div><p id="result-inputs" class="muted"></p><p id="structure" class="muted"></p>
+      <div class="tabs"><button class="tab active" data-gas="CO2">CO₂</button><button class="tab" data-gas="CH4">CH₄</button></div>
+      <div id="chart" role="img" aria-label="모델 예측과 GCMC 기준값 비교"></div>
+      <div class="table-scroll"><table><thead><tr><th>기체</th><th>압력 (bar)</th><th>예측</th><th>GCMC 기준</th><th>절대 오차</th></tr></thead><tbody id="values"></tbody></table></div><p class="muted">흡착량·오차 단위: mmol g⁻¹</p><p id="reference-note" class="muted"></p>
+    </div>
+    <div id="history-area" hidden><h3>실행 기록 · 보기를 눌러 다시 열기</h3><div class="table-scroll"><table><thead><tr><th>구조 / 실행</th><th>입력</th><th>추론 시간</th></tr></thead><tbody id="history"></tbody></table></div></div>
+  </section>
+</main>
+<footer>Server CPU inference · 가중치 비공개 · hMOF / GCMC 예측이며 실험 측정값이 아닙니다.</footer>
+<script src="config.js"></script><script src="app.js"></script>
+</body></html>

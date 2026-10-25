@@ -1,0 +1,41 @@
+{
+  "purpose": "External inference evaluation with no overlap with the full original 50K",
+  "sampling_method": "Uniform random sampling without replacement from sorted valid remaining MOFX-DB records; NumPy PCG64 generator. The primary 10K and ordered reserve are fixed before CIF parsing and inference.",
+  "seed": 20260727,
+  "sample_size": 10000,
+  "reserve_size": 500,
+  "source_zip": "bulk-dl-mofdb-version-dc8a0295db.zip",
+  "source_zip_sha256": "787037137f979dd6aff54e2337a12a2ff352186f4199591968abbb5c3ddece20",
+  "existing_csv": "MOF_CO2_CH4_50K.csv",
+  "existing_csv_sha256": "6a3141ddbc7ab1495cb27a9dc30de27cd80336509106c051a424b851eed070c2",
+  "existing_id_count": 50000,
+  "valid_population_count": 130044,
+  "remaining_valid_population_count": 80044,
+  "archive_status_counts": {
+    "co2_0p5bar_outlier": 2,
+    "invalid_descriptor": 6266,
+    "nonmonotonic_ch4": 785,
+    "nonmonotonic_co2": 555,
+    "valid": 130044
+  },
+  "selected_id_order_sha256": "10d68a0d6e720b0a9c74e93b8b51623195aea1dd2591aec809dfa74d1e72ee94",
+  "primary_id_order_sha256": "38c564cdc1e5d66e445707ab7432ad2645b647abd9f83f41514ddf16f3f4cc74",
+  "files": {
+    "external_candidate_pool_inputs.csv": "ee90d63492dfe5664d6740f0774a408d49ea7825438b12faa717aa771281259e",
+    "external_candidate_pool_labels_private.csv": "64fea67f8eb5a3dbd90a8bf9e237b39ab6480313ea27c1ad49767be3db388229",
+    "external_candidate_pool_cifs.zip": "820f79baa3b7b9c8c3e914c07597faeee60d232a9f624cf3aba3fad96bf690d8"
+  },
+  "target_columns": [
+    "co2_q_0p01bar",
+    "co2_q_0p05bar",
+    "co2_adsorption_0.1bar",
+    "co2_adsorption_0.5bar",
+    "co2_adsorption_2.5bar",
+    "ch4_adsorption_0.05bar",
+    "ch4_adsorption_0.5bar",
+    "ch4_adsorption_0.9bar",
+    "ch4_adsorption_2.5bar",
+    "ch4_adsorption_4.5bar"
+  ],
+  "label_separation_note": "The inference pipeline must read only the inputs CSV and CIF ZIP. The private labels CSV is opened only after predictions are complete."
+}
