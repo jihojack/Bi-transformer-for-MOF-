@@ -9,7 +9,7 @@
 - `external_sampling_manifest.json`: 추가 10K 추출 seed·모집단·해시 기록
 - `external_colab_manifest.json`: Colab용 입력·라벨·CIF 일치 및 중복 검사 기록
 - `../app/assets/`: 공개 전처리 파라미터와 체크포인트 해시 메타데이터 (가중치 없음)
-- `../app/examples/`: 예제 CIF 20개, 기술자와 GCMC 기준값
+- `../app/examples/`: 원래 검증용 CIF 20개, 기술자와 GCMC 기준값. 앱에는 `demo_selection.json`에 따라 18개만 표시하며 연구 평가 자료는 그대로 보존
 - `../results/internal/test_predictions.csv`: 내부 시험 10K의 기준값·예측값
 
 구축 및 샘플링 manifest의 개인 PC 절대경로는 파일명으로 정리했습니다.

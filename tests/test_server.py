@@ -30,7 +30,8 @@ class APIContractTests(unittest.TestCase):
         self.fake=FakePredictor();self.client=create_app(self.fake,warm=False).test_client();self.e=CATALOG[0]
 
     def test_catalog_and_cif(self):
-        entries=self.client.get('/api/examples').get_json()['examples'];self.assertEqual(len(entries),20)
+        entries=self.client.get('/api/examples').get_json()['examples'];self.assertEqual(len(entries),18)
+        self.assertTrue({'hmof-5060237','hmof-5036458'}.isdisjoint(e['mof_id'] for e in entries))
         self.assertNotIn('reference_output',entries[0]);self.assertNotIn('graph',entries[0])
         with self.client.get('/api/examples/'+self.e['mof_id']+'/cif') as response:self.assertEqual(response.status_code,200)
         self.assertEqual(self.client.get('/api/examples/not-real/cif').status_code,404)
@@ -40,6 +41,25 @@ class APIContractTests(unittest.TestCase):
             self.assertEqual(self.client.get(route).status_code,404,route)
         with self.client.get('/') as response:self.assertIn('서버 추론',response.data.decode())
         with self.client.get('/app.js') as response:self.assertNotIn('ort.wasm',response.data.decode())
+
+    def test_removed_demo_entries_are_not_available_in_app(self):
+        for mof_id in ['hmof-5060237','hmof-5036458']:
+            self.assertEqual(self.client.get('/api/examples/'+mof_id+'/cif').status_code,404)
+            self.assertEqual(self.client.post('/api/predict/example',json={'mof_id':mof_id}).status_code,400)
+        self.assertFalse(self.fake.paths)
+
+    def test_removed_demo_structure_keeps_research_reference_on_upload(self):
+        e=CATALOG[11]
+        data={k:str(v) for k,v in e['descriptors'].items()}
+        data['cif']=(io.BytesIO((ROOT/'app/examples'/e['cif']).read_bytes()),e['mof_id']+'.cif')
+        response=self.client.post('/api/predict',data=data,content_type='multipart/form-data')
+        self.assertEqual(response.status_code,200)
+        self.assertTrue(response.get_json()['comparable'])
+        self.assertEqual(len(response.get_json()['reference']),10)
+
+    def test_manual_status_button_is_removed(self):
+        with self.client.get('/') as response:
+            self.assertNotIn('id="check-server"',response.data.decode())
 
     def test_example_reference(self):
         response=self.client.post('/api/predict/example',json={'mof_id':self.e['mof_id']});self.assertEqual(response.status_code,200)

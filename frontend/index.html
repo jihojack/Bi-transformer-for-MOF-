@@ -5,7 +5,7 @@
 <main>
   <section class="panel controls">
     <h2>구조 입력</h2>
-    <div class="tabs"><button type="button" class="tab active" data-mode="example">예제 20개</button><button type="button" class="tab" data-mode="upload">CIF 업로드</button></div>
+    <div class="tabs"><button type="button" class="tab active" data-mode="example">예제</button><button type="button" class="tab" data-mode="upload">CIF 업로드</button></div>
     <div id="example-input"><label for="example">MOF 예제</label><select id="example" disabled></select><div class="links"><a id="cif-link" download>CIF 내려받기</a></div><p class="muted">기존 50K와 겹치지 않는 추가 평가군에서 선정했습니다.</p></div>
     <div id="upload-input" hidden><label for="cif">CIF 파일 · 최대 2 MB</label><input id="cif" type="file" accept=".cif"><p id="file-info" class="muted">파일과 입력값을 추론 서버로 전송합니다. 요청이 끝나면 서버의 임시 파일은 삭제됩니다.</p><p id="limits" class="muted"></p></div>
     <form id="descriptor-form"><div class="section-head"><h3>전역 구조 기술자</h3><button id="reset" type="button" class="secondary">원래 값</button></div>
@@ -18,10 +18,9 @@
     </form>
     <p id="input-note" class="muted"></p>
     <button id="predict" disabled>예측 실행</button>
-    <div id="batch-controls"><button id="batch" class="secondary" disabled>20개 원래 값으로 순차 예측</button></div>
+    <div id="batch-controls"><button id="batch" class="secondary" disabled>예제 전체 순차 예측</button></div>
     <button id="stop" class="secondary" hidden>현재 예측 후 중지</button>
     <p id="progress" class="muted" role="status"></p>
-    <button id="check-server" class="secondary">서버 상태 확인</button>
     <details><summary>모델과 데이터 처리</summary><p>모델 가중치·ONNX 파일을 이 브라우저로 내려받지 않습니다. 서버에서 CIF의 원자 구조와 기술자를 분석하고 예측값만 반환합니다.</p><p>표면적·공극률·LCD·PLD는 자동 계산하지 않으므로 해당 CIF와 같은 정의의 수치를 입력하세요. 기존 CIF에 임의의 값을 넣는 경우 입력 민감도 탐색으로 해석해야 합니다.</p><p>현재 동결된 원소 표는 Br, C, Cl, Cu, F, H, N, O, V, Zn, Zr을 지원합니다. 부분 점유 구조·여러 구조가 함께 든 CIF는 지원하지 않습니다. 실제 실험 MOF에 대한 정확도는 별도 검증이 필요합니다.</p></details>
   </section>
   <section class="panel results" aria-live="polite">

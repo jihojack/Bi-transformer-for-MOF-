@@ -21,4 +21,6 @@ jobs:
       - name: Test API contracts and native CIF preprocessing without weights
         run: python -m unittest discover -s tests -v
       - name: Check frontend syntax
-        run: node --check frontend/app.js
+        run: |
+          node --check frontend/app.js
+          node --test tests/frontend.test.cjs

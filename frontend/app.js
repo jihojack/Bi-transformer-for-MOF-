@@ -2,6 +2,7 @@
 const $=id=>document.getElementById(id),keys=['surface_area_m2g','void_fraction','lcd','pld'];
 const base=(window.MOF_API_BASE||'').replace(/\/$/,'');
 let examples=[],mode='example',ready=false,busy=false,stopped=false,current,gas='CO2',counter=0,polling=0;
+let statusTimer=null,statusBusy=false;
 const results=new Map();
 const api=path=>base+path;
 function controls(){
@@ -13,18 +14,45 @@ function controls(){
   $('previous').disabled=busy||i<=0;$('next').disabled=busy||i<0||i===ids.length-1;
   document.querySelectorAll('#history button').forEach(b=>b.disabled=busy);
 }
-function fail(e){$('error').hidden=false;$('error').textContent=e.message||String(e);}
-async function jsonRequest(path,options={},retries=0){
-  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),180000);
-  try{const r=await fetch(api(path),{...options,signal:controller.signal});const data=await r.json();
-    if(r.status===429&&retries<3){await new Promise(resolve=>setTimeout(resolve,2000));return jsonRequest(path,options,retries+1);}
+function fail(e,scope='prediction'){$('error').hidden=false;$('error').dataset.scope=scope;$('error').textContent=e.message||String(e);}
+async function jsonRequest(path,options={},retries=0,timeout=180000){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
+  try{const r=await fetch(api(path),{...options,signal:controller.signal});let data;
+    try{data=await r.json();}catch{throw new Error('서버가 시작 중이거나 응답이 아직 준비되지 않았습니다.');}
+    if(r.status===429&&retries<3){await new Promise(resolve=>setTimeout(resolve,2000));return jsonRequest(path,options,retries+1,timeout);}
     if(!r.ok)throw new Error(data.error||`HTTP ${r.status}`);return data;
   }catch(e){if(e.name==='AbortError')throw new Error('서버 응답이 지연됩니다. 잠시 후 다시 시도하세요.');throw e;}finally{clearTimeout(timer);}
 }
-async function checkServer(){
-  try{const s=await jsonRequest('/api/status');ready=s.ready;$('status').textContent=ready?'준비됨 · 서버 CPU':s.error?'서버 모델 준비 실패':'서버 준비 중';$('limits').textContent=`대칭 확장 후 최대 ${s.max_atoms}개 원자. 무료 서버 메모리 보호를 위한 제한입니다.`;
-    if(!ready&&s.error)fail(new Error(s.error));if(!ready&&!s.error&&polling++<60)setTimeout(checkServer,2000);
-  }catch(e){ready=false;$('status').textContent='서버 연결 실패';fail(new Error('추론 서버에 연결할 수 없습니다. 서버 주소와 실행 상태를 확인하세요.'));}controls();
+async function checkServer(reset=false){
+  if(statusBusy)return;
+  if(statusTimer!==null){clearTimeout(statusTimer);statusTimer=null;}
+  if(reset)polling=0;
+  statusBusy=true;polling++;let terminalError=false;
+  $('status').textContent='서버 연결 확인 중…';
+  try{
+    const s=await jsonRequest('/api/status',{},0,20000);ready=s.ready;
+    $('limits').textContent=`대칭 확장 후 최대 ${s.max_atoms}개 원자. 무료 서버 메모리 보호를 위한 제한입니다.`;
+    if(ready){
+      if(!examples.length){
+        const response=await jsonRequest('/api/examples',{},0,20000);examples=response.examples;
+        if(!examples.length)throw new Error('사용 가능한 예제가 없습니다.');
+        $('example').replaceChildren(...examples.map((e,i)=>new Option(`${i+1}. ${e.mof_id} · ${e.atoms} atoms`,e.mof_id)));
+        document.querySelector('[data-mode="example"]').textContent=`예제 ${examples.length}개`;
+        $('batch').textContent=`${examples.length}개 원래 값으로 순차 예측`;
+        if(mode==='example')displayInputs();
+      }
+      polling=0;$('status').textContent='준비됨 · 서버 CPU';
+      if($('error').dataset.scope==='server')$('error').hidden=true;
+    }else if(s.error){terminalError=true;$('status').textContent='서버 모델 준비 실패';fail(new Error(s.error),'server');}
+    else $('status').textContent=`서버 준비 중 · 자동 확인 ${polling}/8`;
+  }catch(e){ready=false;$('status').textContent=`서버 재연결 중 · ${polling}/8`;}
+  finally{statusBusy=false;controls();}
+  // Retry cold starts, including Render's temporary non-JSON loading response.
+  // Do not poll a healthy server continuously: let the free instance sleep.
+  if(!ready&&!terminalError){
+    if(polling<8)statusTimer=setTimeout(()=>{statusTimer=null;checkServer();},Math.min(1000*2**polling,15000));
+    else{$('status').textContent='서버 연결 실패';fail(new Error('서버에 연결하지 못했습니다. 잠시 후 페이지를 새로고침하세요.'),'server');}
+  }
 }
 function selected(){return examples.find(e=>e.mof_id===$('example').value);}
 function displayInputs(){const e=selected();if(!e)return;keys.forEach(k=>$(k).value=e.descriptors[k]);$('cif-link').href=api(`/api/examples/${encodeURIComponent(e.mof_id)}/cif`);updateNote();}
@@ -68,7 +96,9 @@ $('result-select').addEventListener('change',()=>selectResult($('result-select')
 for(const [id,delta]of[['previous',-1],['next',1]])$(id).addEventListener('click',()=>{const ids=[...results.keys()];selectResult(ids[ids.indexOf(current.run_id)+delta]);});
 $('cif').addEventListener('change',()=>{$('file-info').textContent=$('cif').files[0]?.name||'파일을 선택하세요.';keys.forEach(k=>$(k).value='');updateNote();});
 $('descriptor-form').addEventListener('submit',e=>{e.preventDefault();if(!$('predict').disabled)$('predict').click();});
-$('predict').addEventListener('click',async()=>{if(!$('descriptor-form').reportValidity())return;let d;try{d=descriptors();}catch(e){fail(e);return;}busy=true;controls();$('error').hidden=true;$('progress').textContent='서버에서 구조 계산·추론 중…';try{await predict(selected(),d,mode==='upload');$('progress').textContent='완료 · 결과 선택에서 이전 결과를 다시 열 수 있습니다.';}catch(e){fail(e);$('progress').textContent='계산 중단';}finally{busy=false;controls();}});
-$('batch').addEventListener('click',async()=>{busy=true;stopped=false;controls();$('error').hidden=true;$('stop').hidden=false;try{let n=0;for(const e of examples){if(stopped)break;$('example').value=e.mof_id;displayInputs();$('progress').textContent=`${n+1} / 20 · ${e.mof_id} 서버 예측 중…`;await predict(e,e.descriptors);n++;}$('progress').textContent=`${n} / 20 완료 · 결과 선택이나 실행 기록의 보기를 누르세요.`;}catch(e){fail(e);}finally{busy=false;$('stop').hidden=true;controls();}});
-$('stop').addEventListener('click',()=>stopped=true);$('check-server').addEventListener('click',()=>{polling=0;checkServer();});
-(async()=>{controls();try{const response=await jsonRequest('/api/examples');examples=response.examples;$('example').replaceChildren(...examples.map(e=>new Option(`${e.mof_id} · ${e.atoms} atoms`,e.mof_id)));displayInputs();}catch(e){fail(e);}await checkServer();controls();})();
+$('predict').addEventListener('click',async()=>{if(!$('descriptor-form').reportValidity())return;let d;try{d=descriptors();}catch(e){fail(e);return;}busy=true;controls();$('error').hidden=true;$('progress').textContent='서버에서 구조 계산·추론 중…';try{await predict(selected(),d,mode==='upload');$('progress').textContent='완료 · 결과 선택에서 이전 결과를 다시 열 수 있습니다.';}catch(e){fail(e);$('progress').textContent='계산 중단';checkServer(true);}finally{busy=false;controls();}});
+$('batch').addEventListener('click',async()=>{busy=true;stopped=false;controls();$('error').hidden=true;$('stop').hidden=false;try{let n=0;for(const e of examples){if(stopped)break;$('example').value=e.mof_id;displayInputs();$('progress').textContent=`${n+1} / ${examples.length} · ${e.mof_id} 서버 예측 중…`;await predict(e,e.descriptors);n++;}$('progress').textContent=`${n} / ${examples.length} 완료 · 결과 선택이나 실행 기록의 보기를 누르세요.`;}catch(e){fail(e);checkServer(true);}finally{busy=false;$('stop').hidden=true;controls();}});
+$('stop').addEventListener('click',()=>stopped=true);
+window.addEventListener('online',()=>checkServer(true));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!busy)checkServer(true);});
+controls();checkServer(true);

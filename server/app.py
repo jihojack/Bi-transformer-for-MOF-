@@ -34,7 +34,9 @@ def create_app(predictor=None,warm=True,defer_warm=False):
     app=Flask(__name__,static_folder=None)
     app.config['MAX_CONTENT_LENGTH']=2_100_000
     runtime=predictor or Predictor()
-    examples=json.loads((ROOT/'app/examples/catalog.json').read_text(encoding='utf-8'))['examples']
+    catalog=json.loads((ROOT/'app/examples/catalog.json').read_text(encoding='utf-8'))['examples']
+    exclusions=set(json.loads((ROOT/'app/examples/demo_selection.json').read_text(encoding='utf-8'))['excluded_mof_ids'])
+    examples=[e for e in catalog if e['mof_id'] not in exclusions]
     lookup={e['mof_id']:e for e in examples}
     labels=json.loads((ROOT/'app/examples/reference-gcmc.json').read_text(encoding='utf-8'))['values']
     allowed={s.strip().rstrip('/') for s in os.getenv('MOF_ALLOWED_ORIGINS','').split(',') if s.strip()}
@@ -150,7 +152,8 @@ def create_app(predictor=None,warm=True,defer_warm=False):
         try:
             result=runtime.predict(path,descriptors)
             digest=hashlib.sha256(path.read_bytes()).hexdigest()
-            matched=known or next((e for e in examples if e['cif_sha256']==digest),None)
+            # App curation does not remove original validation/reference data.
+            matched=known or next((e for e in catalog if e['cif_sha256']==digest),None)
             modified=bool(matched) and descriptors!=matched['descriptors']
             values=[r['uptake_mmol_g'] for g in ['CO2','CH4'] for r in result['predictions'][g]]
             reference=labels[matched['mof_id']] if matched else None
